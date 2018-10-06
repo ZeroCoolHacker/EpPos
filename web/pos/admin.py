@@ -119,4 +119,6 @@ class EarningsAdmin(admin.ModelAdmin):
     """
     Earnings Report Admin Class
     """
-    pass
+    
+    change_list_template = 'pos/admin/earnings_change_list.html'
+    
