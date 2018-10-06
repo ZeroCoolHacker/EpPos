@@ -1,5 +1,5 @@
 {% extends "admin/change_list.html" %}
-
+{% load humanize %}
 
 {% block content_title %}
     <h1>Sales Summary</h1>
@@ -8,7 +8,57 @@
 
 
 {% block result_list %}
-    <h1>Test</h1>
+<div class=”results”>
+    <table>
+
+    <thead>
+      <tr>
+        <th>
+          <div class=”text”>
+            <a href=”#”>Date</a>
+          </div>
+        </th>
+        <th>
+          <div class=”text”>
+            <a href=”#”>Total Number of sales</a>
+          </div>
+        </th>
+        <th>
+          <div class=”text”>
+            <a href=”#”>Total Sales</a>
+          </div>
+        </th>
+        <th>
+          <div class=”text”>
+            <a href=”#”>
+              <strong>% Of Total Sales Shown</strong>
+            </a>
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for row in earnings %}
+      <tr class="{% cycle 'row1' 'row2' %}">
+        <td> {{ row.last_change }}</td>
+        <td> {{ row.number_of_sales | intcomma }} </td>
+        <td> {{ row.total | default:0 | intcomma }}$ </td>
+        {% comment %} <td> {{ row.total | default:0 | percentof:total_earnings.total }}</td> {% endcomment %}
+      </tr>
+      
+      {% endfor %}
+      <tr style='font-weight:bold;border-top:2px solid #DDDDDD;'>
+        <td> Total </td>
+        <td> {{ total_earnings.number_of_sales | intcomma }} </td>
+        <td> {{ total_earnings.total | default:0 }}$ </td>
+        <td> 100% </td>
+    </tr>
+    </tbody>
+
+  </table>
+</div>
+
 {% endblock result_list %}
     
 
