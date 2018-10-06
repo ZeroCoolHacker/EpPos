@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Cash, Order, Setting
+from .models import Product, Cash, Order, Setting, Earnings
 from django.contrib.admin import SimpleListFilter
 from django.db.models import F
 
@@ -112,3 +112,11 @@ class OrderAdmin(admin.ModelAdmin):
 
     # Order by not Done
     ordering = ('done', )
+
+
+@admin.register(Earnings)
+class EarningsAdmin(admin.ModelAdmin):
+    """
+    Earnings Report Admin Class
+    """
+    pass
