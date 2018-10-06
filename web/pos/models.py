@@ -101,3 +101,14 @@ class Setting(models.Model):
         return bool(self.value)
 
     __nonzero__ = __bool__
+
+
+class Earnings(Order):
+    """
+    A proxy model to use in django admin for reports
+    """
+
+    class Meta:
+        proxy = True
+        verbose_name = "Earnings"
+        verbose_name_plural = verbose_name
