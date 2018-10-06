@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Product, Cash, Order, Setting, Earnings
 from django.contrib.admin import SimpleListFilter
 from django.db.models import F
-
+from django.db.models import Sum, Count
 
 # Register your models here.
 admin.site.register(Cash)
@@ -121,4 +121,33 @@ class EarningsAdmin(admin.ModelAdmin):
     """
     
     change_list_template = 'pos/admin/earnings_change_list.html'
+    date_hierarchy = 'last_change'
     
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(
+            request,
+            extra_context = extra_context
+        )
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except(AttributeError, KeyError):
+            return response
+        
+        metrices = {
+            'number_of_sales': Count('id'),
+            'total' : Sum('total_price'),
+        }
+
+        response.context_data['earnings'] = list(
+            qs
+                .values('last_change')
+                .annotate(**metrices)
+                .order_by('last_change')
+        )
+
+        response.context_data['total_earnings'] = dict(
+            qs.aggregate(**metrices)
+        )
+
+        return response
